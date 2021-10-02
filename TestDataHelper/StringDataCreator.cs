@@ -6,7 +6,8 @@ namespace TestDataHelper
     {
         public string CreateDataPoint()
         {
-            return string.Empty;
+            // Note: Should this data point be a simple char then?
+            return "string.Empty;";
         }
 
         public string CreateDataPointOfSize(int size)
