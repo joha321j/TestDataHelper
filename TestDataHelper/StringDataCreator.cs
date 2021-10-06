@@ -6,6 +6,10 @@ namespace TestDataHelper
     public class StringDataCreator : IDataCreator<string>, IVariableDataSize<string>
     {
         private const int MinimumValue = 0;
+        
+        // C# does not allow objects to have a size above 2GB
+        // Value derived from 2^30 - 33
+        // 33 has to be subtracted to avoid OutOfMemoryException
         private const int MaximumValue = 1073741791;
         
         public string CreateDataPoint()
