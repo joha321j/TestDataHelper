@@ -1,4 +1,6 @@
-﻿using TestDataHelper.DataCreatorInterfaces;
+﻿using System;
+using System.Text;
+using TestDataHelper.DataCreatorInterfaces;
 
 namespace TestDataHelper
 {
@@ -12,12 +14,14 @@ namespace TestDataHelper
 
         public string CreateDataPointOfSize(int size)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public string CreateDataPointOfSize(long size)
-        {
-            throw new System.NotImplementedException();
+            try
+            {
+                return new string('a', size);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                throw new ArgumentOutOfRangeException(nameof(size),"Size cannot be less than zero.");
+            }
         }
     }
 }

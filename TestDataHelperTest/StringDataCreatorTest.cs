@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Diagnostics;
+using FluentAssertions;
 using TestDataHelper;
 using TestDataHelper.DataCreatorInterfaces;
 using Xunit;
@@ -37,10 +39,34 @@ namespace TestDataHelperTest
         [Fact]
         public void Should_returnVeryLongString_when_askingForLongString()
         {
-            int length = 123456789;
+            Process process = Process.GetCurrentProcess();
+            long memorySize = process.PrivateMemorySize64;
+            
+            int length = (int) memorySize;
             string data = _dataCreator.CreateDataPointOfSize(length);
 
             data.Should().HaveLength(length).And.NotBeNullOrWhiteSpace();
+        }
+
+        [Fact]
+        public void Should_beAbleToRun_when_givenMaxStringSize()
+        {
+            // Value derived from 2^30 - 33
+            // 33 has to be subtracted to avoid OutOfMemoryException
+            int maxObject = 1073741791; 
+            _dataCreator.CreateDataPointOfSize(maxObject);
+        }
+
+        [Fact]
+        public void Should_throwException_when_givenNegativeSize()
+        {
+            int input = -546;
+
+            _dataCreator
+                .Invoking(d => d.CreateDataPointOfSize(input))
+                .Should()
+                .ThrowExactly<ArgumentOutOfRangeException>()
+                .WithMessage("Size cannot be less than zero. (Parameter 'size')");
         }
     }
 }
