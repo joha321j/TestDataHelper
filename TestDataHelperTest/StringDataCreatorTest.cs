@@ -68,5 +68,17 @@ namespace TestDataHelperTest
                 .ThrowExactly<ArgumentOutOfRangeException>()
                 .WithMessage("Size cannot be less than zero. (Parameter 'size')");
         }
+
+        [Fact]
+        public void Should_throwException_when_givenTooLangeSize()
+        {
+            int input = int.MaxValue;
+            
+            _dataCreator
+                .Invoking(d => d.CreateDataPointOfSize(input))
+                .Should()
+                .ThrowExactly<ArgumentOutOfRangeException>()
+                .WithMessage("Size cannot be larger than 1073741791. (Parameter 'size')");
+        }
     }
 }
